@@ -12,17 +12,18 @@ client = MongoClient('mongodb://localhost:27017/')
 db = client.startupsDB
 startups = db.startups
 
-def get_startups():
-  driver = webdriver.Chrome()
-  driver.get("https://angel.co/brazil")
-  time.sleep(5)
-  driver.find_element_by_xpath('//*[@id="root"]/div[4]/div[2]/div[2]/div/div[1]/div/div[2]').click()
-  time.sleep(1)
+driver = webdriver.Chrome()
+
+def get_data():
+  driver.get("https://angel.co/companies?locations[]=1622-Brazil")
+  time.sleep(8)
+  driver.find_element_by_xpath('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[3]').click()
+  time.sleep(2)
 
   for i in range(0):
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
     time.sleep(1)
-    driver.find_element_by_xpath('//*[@id="root"]/div[4]/div[2]/div[2]/div/div[3]').click()
+    driver.find_element_by_xpath('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[22]').click()
     time.sleep(1)
   time.sleep(3)
 
@@ -31,56 +32,51 @@ def get_startups():
     name = unidecode.unidecode(element.text)
     angel = element.get_attribute('href')
     if startups.find_one({'name' : str(name)}) == None and str(name) != '':
-      name = {
+      data = {
         'name' : str(name),
         'link' : str(angel)
       }
-      startups.insert_one(name)
+      startups.insert_one(data)
       print('{} saved'.format(name))
       print('link: {}'.format(angel))
     elif startups.find_one({'name' : str(name)}) != None:
       print('{} already exists in database'.format(name))
     else:
       print('Empty String')
-  driver.close()
+
 
 def individual_scrape():
-  driver = webdriver.Chrome()
-  driver.get("https://angel.co/company/neighborly")
+  i=0
+  for startup in startups.find():
 
-  websites = driver.find_elements_by_class_name('company_url')
-  for website in websites:
+    if i > 3:
+      break
+
+    link = startup['link']
+    name = startup['name']
+    driver.get(link)
+
+    website = driver.find_element_by_class_name('company_url')
+    startups.update_one({'name':name}, {'$set' : {'website': website.text}})
     print(website.text)
 
-  about = driver.find_element_by_xpath('//*[@id="root"]/div[4]/div/div[2]/div/div[2]/div[1]/div/div[1]/div/div[3]/div/div')
-  # for about in info:
-  print(about.text)
+    locations = driver.find_element_by_class_name('js-location_tags')
+    print(locations.text)
 
-  locations = driver.find_elements_by_class_name('js-location_tags')
-  for location in locations:
-    print(location.text)
+    fundings = driver.find_elements_by_class_name('raised')
+    for amount in fundings:
+      print(amount.text)
 
-  # investors = driver.find_elements_by_class_name('g-lockup')
-  # for investor in investors:
-  #   print(investor.text)
-
-  fundings = driver.find_elements_by_class_name('raised')
-  for amount in fundings:
-    print(amount.text)
-
-  employees = driver.find_elements_by_class_name('js-company_size')
-  for employee in employees:
+    employee = driver.find_element_by_class_name('js-company_size')
     print(employee.text)
+    
+    print(i + '\n')
+    i+=1
+    time.sleep(10)
 
-  driver.close()
+# get_tada()
+# individual_scrape()
 
-
-# get_startups()
-individual_scrape()
-
-
-# stup = startups.find()
-# for i in stup:
-#   print(i.name)
+driver.close()
 
 
