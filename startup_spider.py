@@ -14,16 +14,16 @@ startups = db.startups
 
 driver = webdriver.Chrome()
 
-def get_data():
+def get_data(xpath):
   driver.get("https://angel.co/companies?locations[]=1622-Brazil")
-  time.sleep(8)
-  driver.find_element_by_xpath('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[3]').click()
+  time.sleep(5)
+  driver.find_element_by_xpath(xpath).click()
   time.sleep(2)
 
-  for i in range(0):
+  for i in range(19):
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
     time.sleep(1)
-    driver.find_element_by_xpath('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[22]').click()
+    driver.find_element_by_class_name('more').click()
     time.sleep(1)
   time.sleep(3)
 
@@ -49,33 +49,53 @@ def individual_scrape():
   i=0
   for startup in startups.find():
 
-    if i > 3:
-      break
-
     link = startup['link']
     name = startup['name']
     driver.get(link)
+    
+    time.sleep(5)
 
     website = driver.find_element_by_class_name('company_url')
     startups.update_one({'name':name}, {'$set' : {'website': website.text}})
-    print(website.text)
+    print('website: ' + website.text)
+
+    markets = driver.find_element_by_class_name('js-market_tags')
+    startups.update_one({'name':name}, {'$set' : {'markets': markets.text}})
+    print('markets: ' + markets.text)
 
     locations = driver.find_element_by_class_name('js-location_tags')
-    print(locations.text)
+    startups.update_one({'name':name}, {'$set' : {'location': locations.text}})
+    print('location: ' + locations.text)
 
+    fundings = []
     fundings = driver.find_elements_by_class_name('raised')
-    for amount in fundings:
-      print(amount.text)
+    if fundings == []:
+      print('amount raised: -')
+      startups.update_one({'name':name}, {'$set' : {'amount raised': '-'}})
+    else:
+      round = len(fundings)
+      for amount in fundings:
+        startups.update_one({'name':name}, {'$set' : {"amount raised in round {}".format(round): amount.text}})
+        print('amount raised in round ' + str(round) +': ' + amount.text)
+        round-=1
 
     employee = driver.find_element_by_class_name('js-company_size')
-    print(employee.text)
+    if employee.text == (None or ''):
+      startups.update_one({'name':name}, {'$set' : {'number of employees': '-'}})
+      print('number of employees: -')
+    else:
+      startups.update_one({'name':name}, {'$set' : {'number of employees': employee.text}})
+      print('number of employees: ' + employee.text)
     
-    print(i + '\n')
+    print(i)
+    print('\n')
     i+=1
-    time.sleep(10)
+    time.sleep(15)
 
-# get_tada()
-# individual_scrape()
+# get_data('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[2]')
+# get_data('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[3]')
+# get_data('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[9]')
+individual_scrape()
 
 driver.close()
 
