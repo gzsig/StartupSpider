@@ -16,17 +16,18 @@ startups = db.startups
 
 driver = webdriver.Chrome()
 
-a = []
-b = []
-c = []
-d = []
-e = []
-f = []
-g = []
-h =[]
-
 
 def get_data(xpath, link):
+
+  a = []
+  b = []
+  c = []
+  d = []
+  e = []
+  f = []
+  g = []
+  h =[]
+
   driver.get(link)
   time.sleep(5)
   driver.find_element_by_xpath(xpath).click()
