@@ -1,9 +1,11 @@
 import json
 import pymongo
 from pymongo import MongoClient
+import random
 from selenium import webdriver
-import unidecode
+from selenium.webdriver.common.keys import Keys
 import time
+import unidecode
 
 # source env/bin/activate 
 # brew services start mongodb
@@ -23,16 +25,18 @@ f = []
 g = []
 h =[]
 
-def get_data(xpath):
-  driver.get("https://angel.co/companies?locations[]=1622-Brazil")
+
+def get_data(xpath, link):
+  driver.get(link)
   time.sleep(5)
   driver.find_element_by_xpath(xpath).click()
   time.sleep(10)
 
   for i in range(20):
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
-    time.sleep(1)
-    driver.find_element_by_class_name('more').click()
+    time.sleep(3)
+    if len(driver.find_elements_by_class_name('more')) > 0: #pay attention: find_element*s*
+      driver.find_element_by_class_name('more').click() #pay attention: find_element
     time.sleep(2)
   time.sleep(5)
 
@@ -83,10 +87,8 @@ def get_data(xpath):
   for element in websites:
     if element.text == '':
       result_list = '-'
-      # f.append(result_list)
     else:
       result_list = element.text
-      # if element.text not in f:
     f.append(result_list)
   # print(f)
 
@@ -117,40 +119,64 @@ def get_data(xpath):
   print(len(g))
   print(len(h))
 
-  # cont = 0
-  # loopmax = len(a)
+  cont = 0
 
-  # while cont < loopmax-1:
-  #   name = a[cont]
-  #   created = c[cont]
-  #   location = d[cont]
-  #   market = e[cont]
-  #   website = f[cont]
-  #   employees = g[cont]
-  #   stage = b[cont]
-  #   raised = h[cont]
-  #   if startups.find_one({'name' : str(name)}) == None and str(name) != '':
-  #     data = {
-  #       'name' : str(name),
-  #       'foundation' : str(created),
-  #       'location' : str(location),
-  #       'market' : str(market),
-  #       'website' : str(website),
-  #       'number of employees' : str(employees),
-  #       'stage' : str(stage),
-  #       'total amount raised' : str(raised),
-  #     }
-  #     print('{} saved!'.format(name))
-  #     print(cont)
-  #     cont+=1
-  #     startups.insert_one(data)
-  #   else:
-  #     print(cont)
-  #     cont+=1
+  while cont < len(a):
+    name = a[cont]
+    created = c[cont]
+    location = d[cont]
+    market = e[cont]
+    website = f[cont]
+    employees = g[cont]
+    stage = b[cont]
+    raised = h[cont]
+    if startups.find_one({'name' : str(name)}) == None and str(name) != '':
+      data = {
+        'name' : str(name),
+        'foundation' : str(created),
+        'location' : str(location),
+        'market' : str(market),
+        'website' : str(website),
+        'number of employees' : str(employees),
+        'stage' : str(stage),
+        'total amount raised' : str(raised),
+      }
+      print('{} saved!'.format(name))
+      cont+=1
+      startups.insert_one(data)
+    else:
+      cont+=1
 
 
-# get_data('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[2]')
-# get_data('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[3]')
-get_data('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[9]')
+urls = [
+'https://angel.co/companies?locations[]=1622-Brazil',
+'https://angel.co/companies?locations[]=1622-Brazil&company_types[]=Startup',
+'https://angel.co/companies?locations[]=1622-Brazil&company_types[]=VC+Firm',
+'https://angel.co/companies?locations[]=1622-Brazil&company_types[]=Private+Company',
+'https://angel.co/companies?locations[]=1622-Brazil&company_types[]=SaaS',
+'https://angel.co/companies?locations[]=1622-Brazil&company_types[]=Incubator',
+'https://angel.co/companies?locations[]=1622-Brazil&company_types[]=Mobile+App',
+'https://angel.co/companies?locations[]=1622-Brazil&stage=Seed',
+'https://angel.co/companies?locations[]=1622-Brazil&stage=Series+A',
+'https://angel.co/companies?locations[]=1622-Brazil&stage=Series+B',
+'https://angel.co/companies?locations[]=1622-Brazil&stage=Series+C',
+'https://angel.co/companies?locations[]=1622-Brazil&stage[]=Acquired',
+'https://angel.co/companies?locations[]=1622-Brazil&markets[]=E-Commerce',
+'https://angel.co/companies?locations[]=1622-Brazil&markets[]=Education',
+'https://angel.co/companies?locations[]=1622-Brazil&markets[]=Enterprise+Software',
+'https://angel.co/companies?locations[]=1622-Brazil&markets[]=Games',
+'https://angel.co/companies?locations[]=1622-Brazil&markets[]=Healthcare',
+'https://angel.co/companies?locations[]=1622-Brazil&markets[]=Mobile'
+]
 
+for url in urls:
+  get_data('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[2]', url)
+  time.sleep(random.randint(6,12))
+  get_data('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[3]', url)
+  time.sleep(random.randint(6,12))
+  get_data('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[9]', url)
+  time.sleep(random.randint(10,15))
+
+
+  
 driver.close()
