@@ -7,6 +7,9 @@ from selenium.webdriver.common.keys import Keys
 import time
 import unidecode
 
+
+# Working
+
 # source env/bin/activate 
 # brew services start mongodb
 

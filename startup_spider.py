@@ -5,6 +5,8 @@ from selenium import webdriver
 import unidecode
 import time
 
+# Not working 
+
 # source env/bin/activate 
 # brew services start mongodb
 

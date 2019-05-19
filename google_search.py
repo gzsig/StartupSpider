@@ -46,7 +46,7 @@ for startup in startups.find():
   names = []
   names.append(name[0])
   for name in names:
-    if cont > 5:
+    if cont > 15:
       break    
     elif cont > 0:
       search(name)
