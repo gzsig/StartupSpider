@@ -15,7 +15,7 @@ import unidecode
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client.startupsDB
-startups = db.startups
+angellist = db.angellist
 
 driver = webdriver.Chrome()
 
@@ -144,7 +144,7 @@ def get_data(xpath, link):
 #     employees = g[cont]
 #     stage = b[cont]
 #     raised = h[cont]
-#     if startups.find_one({'name' : str(name)}) == None and str(name) != '':
+#     if angellist.find_one({'name' : str(name)}) == None and str(name) != '':
 #       data = {
 #         'name' : str(name),
 #         'foundation' : str(created),
@@ -157,7 +157,7 @@ def get_data(xpath, link):
 #       }
 #       print('{} saved!'.format(name))
 #       cont+=1
-#       startups.insert_one(data)
+#       angellist.insert_one(data)
 #     else:
 #       cont+=1
 
