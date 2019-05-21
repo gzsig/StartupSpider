@@ -8,7 +8,7 @@ import random
 # DB variables
 client = MongoClient('mongodb://localhost:27017/')
 db = client.startupsDB
-startups = db.startups
+angellist = db.angellist
 
 # # Open Chrome
 driver = webdriver.Chrome()
@@ -40,13 +40,13 @@ def website(url):
 
 
 cont = 0
-for startup in startups.find():
+for startup in angellist.find():
   name = startup['name']
   name = name.splitlines()
   names = []
   names.append(name[0])
   for name in names:
-    if cont > 15:
+    if cont > 5:
       break    
     elif cont > 0:
       search(name)

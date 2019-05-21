@@ -25,11 +25,12 @@ for startup in startse.find():
   # old_website = startup['website']
 
   driver.get(link)
-  time.sleep(random.randint(2,4))
+  time.sleep(random.randint(1,3))
   website = driver.find_elements_by_xpath("//a[@class='fn mr-15 text-link small']")
+
   if len(website) > 0:
     website = website[0].get_attribute('href')
-    time.sleep(random.randint(2,4))
+    time.sleep(random.randint(1,2))
     startse.update_one({'name':name}, {'$set' : {'website': website}})
     print(str(cont) + '- {} website saved!'.format(name))
 
