@@ -1,11 +1,11 @@
 import json
 import pymongo
 from pymongo import MongoClient
+import dns # required for connecting with SRV
 import random
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
-import unidecode
 
 
 # Working
@@ -13,32 +13,19 @@ import unidecode
 # source env/bin/activate 
 # brew services start mongodb
 
-client = MongoClient('mongodb://localhost:27017/')
+client = pymongo.MongoClient("mongodb+srv://gabriel:Gz%40db3611@cluster0-ozy7g.mongodb.net/test?retryWrites=true")
 db = client.startupsDB
-angellist = db.angellist
+angelList = db.angelList
 
 driver = webdriver.Chrome()
 
-
-def get_data(xpath, link):
-
-  a = []
-  b = []
-  c = []
-  d = []
-  e = []
-  f = []
-  g = []
-  h =[]
-  i = []
-
-  driver.get(link)
-  time.sleep(5)
+def search(url):
+  driver.get(url)
+  time.sleep(2)
   driver.maximize_window()
-  driver.find_element_by_xpath(xpath).click()
-  time.sleep(10)
+  time.sleep(3)
 
-  for i in range(0):
+  for i in range(3):
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
     time.sleep(3)
     if len(driver.find_elements_by_class_name('more')) > 0: #pay attention: find_element*s*
@@ -46,151 +33,87 @@ def get_data(xpath, link):
     time.sleep(2)
   time.sleep(5)
 
-  names = driver.find_elements_by_class_name('company')
-  for element in names:
-    result_list = unidecode.unidecode(element.text)
-    a.append(result_list)
-  print(a)
 
-
-  stages = driver.find_elements_by_class_name('stage')
-  for element in stages:
-    if element.text == '':
-      result_list = '-'
+  startups = driver.find_elements_by_css_selector(".base.startup")
+  for i in range(len(startups)):
+    if len(startups[i].find_elements_by_css_selector('.startup-link')) > 0:
+      internal_link = startups[i].find_element_by_css_selector('.startup-link').get_attribute('href')
     else:
-      result_list = element.text
-    b.append(result_list)
-  print(b)
+      internal_link = '-'
 
-  joins = driver.find_elements_by_class_name('joined')
-  for element in joins:
-    if element.text == '':
-      result_list = '-'
+    if len(startups[i].find_elements_by_tag_name('img')) > 0:
+      logo = startups[i].find_element_by_tag_name('img').get_attribute('src')
     else:
-      result_list = element.text
-    c.append(result_list)
-  print(c)
+      logo = '-'
 
-  locations = driver.find_elements_by_class_name('location')
-  for element in locations:
-    if element.text == '':
-      result_list = '-'
+    if len(startups[i].find_elements_by_css_selector(".pitch")) > 0:
+      pitch = startups[i].find_element_by_css_selector(".pitch").text
     else:
-      result_list = element.text
-    d.append(result_list)
-  print(d)
+      pitch = '-'
 
-  markets = driver.find_elements_by_class_name('market')
-  for element in markets:
-    if element.text == '':
-      result_list = '-'
+    if len(startups[i].find_elements_by_css_selector('.name')) > 0:
+      name = startups[i].find_element_by_css_selector('.name').text
     else:
-      result_list = element.text
-    e.append(result_list)
-  print(e)
+      name = '-'
 
-  websites = driver.find_elements_by_xpath("//div[@class='column website']")
-  for element in websites:
-    if element.text == '':
-      result_list = '-'
+    if len(startups[i].find_elements_by_css_selector('.joined')) > 0:
+      date = startups[i].find_element_by_css_selector('.joined').text
     else:
-      result_list = element.text
-    f.append(result_list)
-  print(f)
+      date = '-'
 
-  sizes = driver.find_elements_by_class_name('company_size')
-  for element in sizes:
-    if element.text == '':
-      result_list = '-'
+    if len(startups[i].find_elements_by_css_selector('.location')) > 0:
+      location = startups[i].find_element_by_css_selector('.location').text
     else:
-      result_list = element.text
-    g.append(result_list)
-  print(g)
+      location = '-'
 
-  raises = driver.find_elements_by_class_name('raised')
-  for element in raises:
-    if element.text == '':
-      result_list = '-'
+    if len(startups[i].find_elements_by_css_selector('.market')) > 0:
+      market = startups[i].find_element_by_css_selector('.market').text
     else:
-      result_list = element.text
-    h.append(result_list)
-  print(h)
+      market = '-'
 
-  angel_links = driver.find_elements_by_class_name('startup-link')
-  print(len(angel_links))
-  for element in angel_links:
-    result_list = str(element.get_attribute('href'))
-    i.append(result_list)
-  print(i)
+    if len(startups[i].find_elements_by_css_selector('.website')) > 0:
+      website = startups[i].find_element_by_css_selector('.website').text
+    else:
+      website = '-'
 
-  print(len(a))
-  print(len(b))
-  print(len(c))
-  print(len(d))
-  print(len(e))
-  print(len(f))
-  print(len(g))
-  print(len(h))
-  print(len(i))
+    if len(startups[i].find_elements_by_css_selector('.company_size')) > 0:
+      company_size = startups[i].find_element_by_css_selector('.company_size').text
+    else:
+      company_size = '-'
 
-#   cont = 0
+    if len(startups[i].find_elements_by_css_selector('.stage')) > 0:
+      stage = startups[i].find_element_by_css_selector('.stage').text
+    else:
+      stage = '-'
 
-#   while cont < len(a):
-#     name = a[cont]
-#     created = c[cont]
-#     location = d[cont]
-#     market = e[cont]
-#     website = f[cont]
-#     employees = g[cont]
-#     stage = b[cont]
-#     raised = h[cont]
-#     if angellist.find_one({'name' : str(name)}) == None and str(name) != '':
-#       data = {
-#         'name' : str(name),
-#         'foundation' : str(created),
-#         'location' : str(location),
-#         'market' : str(market),
-#         'website' : str(website),
-#         'number of employees' : str(employees),
-#         'stage' : str(stage),
-#         'total amount raised' : str(raised),
-#       }
-#       print('{} saved!'.format(name))
-#       cont+=1
-#       angellist.insert_one(data)
-#     else:
-#       cont+=1
+    if len(startups[i].find_elements_by_css_selector('.raised')) > 0:
+      raised = startups[i].find_element_by_css_selector('.raised').text
+    else:
+      raised = '-'
 
 
-# urls = [
-# 'https://angel.co/companies?locations[]=1622-Brazil',
-# 'https://angel.co/companies?locations[]=1622-Brazil&company_types[]=Startup',
-# 'https://angel.co/companies?locations[]=1622-Brazil&company_types[]=VC+Firm',
-# 'https://angel.co/companies?locations[]=1622-Brazil&company_types[]=Private+Company',
-# 'https://angel.co/companies?locations[]=1622-Brazil&company_types[]=SaaS',
-# 'https://angel.co/companies?locations[]=1622-Brazil&company_types[]=Incubator',
-# 'https://angel.co/companies?locations[]=1622-Brazil&company_types[]=Mobile+App',
-# 'https://angel.co/companies?locations[]=1622-Brazil&stage=Seed',
-# 'https://angel.co/companies?locations[]=1622-Brazil&stage=Series+A',
-# 'https://angel.co/companies?locations[]=1622-Brazil&stage=Series+B',
-# 'https://angel.co/companies?locations[]=1622-Brazil&stage=Series+C',
-# 'https://angel.co/companies?locations[]=1622-Brazil&stage[]=Acquired',
-# 'https://angel.co/companies?locations[]=1622-Brazil&markets[]=E-Commerce',
-# 'https://angel.co/companies?locations[]=1622-Brazil&markets[]=Education',
-# 'https://angel.co/companies?locations[]=1622-Brazil&markets[]=Enterprise+Software',
-# 'https://angel.co/companies?locations[]=1622-Brazil&markets[]=Games',
-# 'https://angel.co/companies?locations[]=1622-Brazil&markets[]=Healthcare',
-# 'https://angel.co/companies?locations[]=1622-Brazil&markets[]=Mobile'
-# ]
 
-# for url in urls:
-#   get_data('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[2]', url)
-#   time.sleep(random.randint(6,12))
-#   get_data('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[3]', url)
-#   time.sleep(random.randint(6,12))
-#   get_data('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[9]', url)
-#   time.sleep(random.randint(10,15))
+    if angelList.find_one({'name' : str(name)}) == None and str(name) != '':
+      data = {
+        'name' : str(name),
+        'location' : str(location),
+        'logo' : str(logo),
+        'pitch' : str(pitch),
+        'internal link' : str(internal_link),
+        'founded' : str(date),
+        'market' : str(market),
+        'website' : str(website),
+        'number of employees' : str(company_size),
+        'stage' : str(stage),
+        'amount raised' : str(raised)
+      }
+      angelList.insert_one(data)
+      print('{} saved!'.format(name))
+      print('\n')
+    else:
+      print('{} already!'.format(name))
+    
 
-get_data('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[2]', 'https://angel.co/companies?locations[]=1622-Brazil')
+search('https://angel.co/companies?locations[]=1622-Brazil&company_types[]=Startup')
 
 driver.close()
