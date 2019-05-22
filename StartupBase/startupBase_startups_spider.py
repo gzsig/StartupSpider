@@ -41,17 +41,26 @@ def search(url):
         info = startups[i].find_element_by_class_name('text-center').text
       else:
         info = '-'
+      if startups[i].find_element_by_tag_name('a') != None:
+        internal_link = startups[i].find_element_by_tag_name('a').get_attribute('href')
+      else:
+        internal_link = '-'
+
+
+
       if test_one.find_one({'name' : str(name)}) == None and str(name) != '':
         data = {
           'name' : str(name),
           'location' : str(location),
           'logo' : str(logo),
-          'info' : str(info)
+          'info' : str(info),
+          'internal link' : str(internal_link)
         }
         print('{} saved!'.format(name))
         print('{} saved!'.format(logo))
         print('{} saved!'.format(location))
-        print('{} saved!'.format(name))
+        print('{} saved!'.format(info))
+        print('{} saved!'.format(internal_link))
         print('\n')
         test_one.insert_one(data)
       else:
