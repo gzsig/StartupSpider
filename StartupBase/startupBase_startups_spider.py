@@ -12,8 +12,8 @@ import time
 # brew services start mongodb
 
 client = pymongo.MongoClient("mongodb+srv://gabriel:Gz%40db3611@cluster0-ozy7g.mongodb.net/test?retryWrites=true")
-db = client.test
-test_one = db.test_one
+db = client.startupsDB
+startupBase = db.startupBase
 
 driver = webdriver.Chrome()
 
@@ -48,7 +48,7 @@ def search(url):
 
 
 
-      if test_one.find_one({'name' : str(name)}) == None and str(name) != '':
+      if startupBase.find_one({'name' : str(name)}) == None and str(name) != '':
         data = {
           'name' : str(name),
           'location' : str(location),
@@ -62,7 +62,7 @@ def search(url):
         print('{} saved!'.format(info))
         print('{} saved!'.format(internal_link))
         print('\n')
-        test_one.insert_one(data)
+        startupBase.insert_one(data)
       else:
         print('{} already!'.format(name))
       time.sleep(random.randint(1,3))
