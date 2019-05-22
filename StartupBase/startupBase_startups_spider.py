@@ -30,7 +30,22 @@ def search(url):
   names = driver.find_elements_by_tag_name('card-startup')
   for i in range(len(names)):
     # print(logo_links[i].find_element_by_tag_name('img').get_attribute('src'))
-    print(names[i].text)
+    if names[i].find_element_by_css_selector(".mb-0") != None:
+      print('name')
+      print(names[i].find_element_by_css_selector(".mb-0").text)
+
+    if names[i].find_element_by_css_selector(".col-4.sb-card__verified") != None:
+      print('logo')
+      print(names[i].find_element_by_css_selector(".col-4.sb-card__verified").find_element_by_tag_name('img').get_attribute('src'))
+
+    if names[i].find_element_by_tag_name('small') != None:
+      print('location')
+      print(names[i].find_element_by_tag_name('small').text)
+
+    if len(names[i].find_elements_by_class_name('text-center')) > 0:
+      print('info')
+      print(names[i].find_element_by_class_name('text-center').text)
+    
     print('\n')
     # print(locations[i].text)
     # print(infos[i].text)
