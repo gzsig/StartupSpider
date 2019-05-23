@@ -21,8 +21,8 @@ cont = 0
 startups = startse.find({}, no_cursor_timeout=True)
 
 for startup in startups:
-#   if cont > 3:
-#     break
+  # if cont > 7:
+  #   break
 
   cont+=1
   link = startup['internal link']
@@ -37,6 +37,23 @@ for startup in startups:
   time.sleep(random.randint(1,3))
   website = driver.find_elements_by_xpath("//a[@class='fn mr-15 text-link small']")
   social_media = driver.find_elements_by_xpath("//a[@class='fn pr-15 text-link small']")
+  content = driver.find_element_by_class_name('col-md-8')
+
+  info = content.find_elements_by_tag_name('p')
+  if len(info) > 1:
+    main_info = info[0].text
+    extra_info = info[1].text
+    startse.update_one({'name':name}, {'$set' : {'info': main_info}})
+    startse.update_one({'name':name}, {'$set' : {'extra info': extra_info}})
+    print('TWO infos saved!')
+  elif len(info) > 0:
+    main_info = info[0].text
+    startse.update_one({'name':name}, {'$set' : {'info': main_info}})
+    print('ONE info saved!')
+  else:
+    main_info = 'no info available'
+    startse.update_one({'name':name}, {'$set' : {'info': main_info}})
+    print('NO info given')
 
   if len(website) > 0:
     website = website[0].get_attribute('href')
