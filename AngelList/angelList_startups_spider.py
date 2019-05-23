@@ -19,13 +19,15 @@ angelList = db.angelList
 
 driver = webdriver.Chrome()
 
-def search(url):
-  driver.get(url)
+def search(xpath):
+  driver.get('https://angel.co/companies?locations[]=1622-Brazil&company_types[]=Startup')
+  time.sleep(8)
+  driver.find_element_by_xpath(xpath).click()
   time.sleep(2)
   driver.maximize_window()
   time.sleep(3)
 
-  for i in range(3):
+  for i in range(20):
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
     time.sleep(3)
     if len(driver.find_elements_by_class_name('more')) > 0: #pay attention: find_element*s*
@@ -114,6 +116,10 @@ def search(url):
       print('{} already!'.format(name))
     
 
-search('https://angel.co/companies?locations[]=1622-Brazil&company_types[]=Startup')
+search('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[3]')
+time.sleep(3)
+search('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[9]')
+time.sleep(3)
+search('//*[@id="root"]/div[4]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div/div[2]')
 
 driver.close()
