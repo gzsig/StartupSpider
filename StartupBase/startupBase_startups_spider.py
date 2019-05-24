@@ -19,10 +19,13 @@ driver = webdriver.Chrome()
 
 start = time.time()
 
-def search(url):
+def search(letter, url):
   driver.get(url)
   time.sleep(2)
   driver.maximize_window()
+  time.sleep(2)
+  elem = driver.find_elements_by_class_name('ais-SearchBox-input')  # Find the search box
+  elem[1].send_keys(letter + Keys.RETURN)
   time.sleep(3)
   for i in range(2):
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
@@ -82,7 +85,38 @@ def search(url):
       print('{} already in DB!'.format(name))
     time.sleep(1)
 
-search('https://startupbase.com.br/startups?q=&states=all&cities=all&groups=all&targets=all&phases=all&models=all&badges=all')
+letters = [
+  'a',
+  'b',
+  'c',
+  'd',
+  'e',
+  'f',
+  'g',
+  'h',
+  'i',
+  'j',
+  'k',
+  'l',
+  'm',
+  'n',
+  'o',
+  'p',
+  'q',
+  'r',
+  's',
+  't',
+  'u',
+  'v',
+  'w',
+  'x',
+  'y',
+  'z'
+]
+for letter in letters:
+  search(letter, 'https://startupbase.com.br/startups')
+  time.sleep(random.randint(2,4))
+  
 end = time.time()
 print(end - start)
 
