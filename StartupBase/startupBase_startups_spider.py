@@ -87,7 +87,6 @@ def search(letter, url):
       print('\n')
     else:
       print(str(cont) + '- {} already in DB!'.format(name))
-    time.sleep(1)
 
 letters = [
   'a',
@@ -119,7 +118,7 @@ letters = [
 ]
 for letter in letters:
   search(letter, 'https://startupbase.com.br/startups')
-  time.sleep(random.randint(2,4))
+  time.sleep(random.randint(1,2))
   
 end = time.time()
 print(end - start)
