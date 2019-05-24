@@ -19,7 +19,10 @@ driver = webdriver.Chrome()
 
 start = time.time()
 
+
+
 def search(letter, url):
+  cont = 0
   driver.get(url)
   time.sleep(2)
   driver.maximize_window()
@@ -27,7 +30,7 @@ def search(letter, url):
   elem = driver.find_elements_by_class_name('ais-SearchBox-input')  # Find the search box
   elem[1].send_keys(letter + Keys.RETURN)
   time.sleep(3)
-  for i in range(2):
+  for i in range(100):
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
     time.sleep(1)
   time.sleep(2)
@@ -35,6 +38,7 @@ def search(letter, url):
   page = driver.find_element_by_class_name('ais-InfiniteHits')
   startups = page.find_elements_by_class_name('search-body__item')
   for startup in startups:
+    cont += 1
     if len(startup.find_elements_by_tag_name('a')) > 0:
       internal_link = startup.find_element_by_tag_name('a').get_attribute('href')
       # print(startup.find_element_by_tag_name('a').get_attribute('href'))
@@ -79,10 +83,10 @@ def search(letter, url):
         'info' : str(info)
       }
       startupBase.insert_one(data)
-      print('{} saved!'.format(data))
+      print(str(cont) + '- {} saved!'.format(data))
       print('\n')
     else:
-      print('{} already in DB!'.format(name))
+      print(str(cont) + '- {} already in DB!'.format(name))
     time.sleep(1)
 
 letters = [
