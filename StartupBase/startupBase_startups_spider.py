@@ -30,7 +30,7 @@ def search(letter, url):
   elem = driver.find_elements_by_class_name('ais-SearchBox-input')  # Find the search box
   elem[1].send_keys(letter + Keys.RETURN)
   time.sleep(3)
-  for i in range(100):
+  for i in range(10):
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
     time.sleep(1)
   time.sleep(2)
@@ -114,7 +114,17 @@ letters = [
   'w',
   'x',
   'y',
-  'z'
+  'z',
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9'
 ]
 for letter in letters:
   search(letter, 'https://startupbase.com.br/startups')
