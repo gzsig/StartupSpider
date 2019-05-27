@@ -31,9 +31,9 @@ for startup in startupBase.find():
   cont += 1
   link = startup['internal link']
   name = startup['name']
-  driver.get(link)
 
   if 'moment' not in startup.keys():
+    driver.get(link)
     if len(driver.find_elements_by_css_selector('.startup-timely__data.has-text-weight-semibold.sb-size-6')) > 0:
       specific_info = []
       while specific_info == []:
@@ -131,10 +131,9 @@ for startup in startupBase.find():
         startupBase.update_one({'name':name}, {'$set' : {'website': website}})
       print(str(cont) + '- {} saved extra info'.format(name))
       print('\n')
-      time.sleep(random.randint(2,5))
+      time.sleep(random.randint(1,2))
   else:
     print(str(cont) + '- {} already has extra info'.format(name))
-    time.sleep(random.randint(1,3))
 
 
 end = time.time()
