@@ -33,7 +33,7 @@ for startup in startupBase.find():
   name = startup['name']
   driver.get(link)
 
-  if 'momento' not in startup.keys():
+  if 'moment' not in startup.keys():
 
     specific_info = []
     while specific_info == []:
@@ -47,9 +47,9 @@ for startup in startupBase.find():
     modelo_de_receita = specific_info[2].text
     momento = specific_info[3].text
 
-    startupBase.update_one({'name':name}, {'$set' : {'publico alvo': publico_alvo}})
-    startupBase.update_one({'name':name}, {'$set' : {'modelo de receita': modelo_de_receita}})
-    startupBase.update_one({'name':name}, {'$set' : {'momento': momento}})
+    startupBase.update_one({'name':name}, {'$set' : {'target audience': publico_alvo}})
+    startupBase.update_one({'name':name}, {'$set' : {'revenue model': modelo_de_receita}})
+    startupBase.update_one({'name':name}, {'$set' : {'moment': momento}})
 
     if len(driver.find_elements_by_css_selector('.column.is-half-mobile.is-one-third-tablet.is-one-quarter-desktop')) > 0:
       cards = driver.find_elements_by_css_selector('.column.is-half-mobile.is-one-third-tablet.is-one-quarter-desktop')
@@ -134,6 +134,7 @@ for startup in startupBase.find():
     time.sleep(random.randint(1,3))
   else:
     print(str(cont) + '- {} already has extra info'.format(name))
+    time.sleep(random.randint(1,3))
 
 
 end = time.time()
