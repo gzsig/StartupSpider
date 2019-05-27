@@ -20,14 +20,14 @@ db = client.startupsDB
 startupBase = db.startupBase
 
 driver = webdriver.Chrome()
-
+driver.maximize_window()
 start = time.time()
 
 cont = 0
 
 for startup in startupBase.find():
-  if cont > 5:
-    break
+  # if cont > 5:
+  #   break
   cont += 1
   link = startup['internal link']
   name = startup['name']
@@ -131,7 +131,7 @@ for startup in startupBase.find():
       startupBase.update_one({'name':name}, {'$set' : {'website': website}})
     print(str(cont) + '- {} saved extra info'.format(name))
     print('\n')
-    time.sleep(random.randint(1,3))
+    time.sleep(random.randint(2,5))
   else:
     print(str(cont) + '- {} already has extra info'.format(name))
     time.sleep(random.randint(1,3))
