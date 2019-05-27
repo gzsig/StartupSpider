@@ -2,7 +2,11 @@ import pymongo
 import dns # required for connecting with SRV
 
 
-client = pymongo.MongoClient("mongodb+srv://gabriel:Gz%40db3611@cluster0-ozy7g.mongodb.net/test?retryWrites=true")
+password = ""
+with open("password.txt", "r") as password_file:
+  password = password_file.readline()
+
+client = pymongo.MongoClient(password)
 db = client.test
 test_one = db.test_one
 
