@@ -7,7 +7,11 @@ import time
 # source env/bin/activate 
 # brew services start mongodb
 
-client = pymongo.MongoClient("mongodb+srv://gabriel:Gz%40db3611@cluster0-ozy7g.mongodb.net/test?retryWrites=true")
+password = ""
+with open("password.txt", "r") as password_file:
+  password = password_file.readline()
+
+client = pymongo.MongoClient(password)
 db = client.startupsDB
 startse = db.startSe
 
