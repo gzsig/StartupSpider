@@ -34,6 +34,7 @@ for startup in startupBase.find():
 
   if 'moment' not in startup.keys():
     driver.get(link)
+    time.sleep(1)
     if len(driver.find_elements_by_css_selector('.startup-timely__data.has-text-weight-semibold.sb-size-6')) > 0:
       specific_info = []
       while specific_info == []:
