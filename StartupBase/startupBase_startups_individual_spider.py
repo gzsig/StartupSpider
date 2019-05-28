@@ -19,7 +19,7 @@ client = pymongo.MongoClient(password)
 db = client.startupsDB
 # saving collections in variables
 startupBase = db.startupBase
-
+# open broweser
 driver = webdriver.Chrome()
 driver.maximize_window()
 
