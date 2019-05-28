@@ -36,6 +36,8 @@ for startup in startupBase.find():
   if 'moment' not in startup.keys():
     # gets open browser and goes to internal link
     driver.get(link)
+    # lets driver finish loading link
+    time.sleep(1)
     # checks if link is not broken
     if len(driver.find_elements_by_css_selector('.startup-timely__data.has-text-weight-semibold.sb-size-6')) > 0:
       specific_info = []
