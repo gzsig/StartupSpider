@@ -100,12 +100,8 @@ for startup in startupBase.find():
       foundation = info_card.find_elements_by_css_selector('.mold-text.sb-size-10')[0].text
       employees = info_card.find_elements_by_css_selector('.mold-text.sb-size-10')[1].text
       last_update = info_card.find_elements_by_css_selector('.mold-text.sb-size-10')[2].text
-<<<<<<< HEAD
       if members != []:
         startupBase.update_one({'name':name}, {'$set' : {'members': members}})
-=======
-
->>>>>>> 9e85907e348bfb6a5040d598854dc46e92d1a755
       startupBase.update_one({'name':name}, {'$set' : {'foundation': foundation}})
       startupBase.update_one({'name':name}, {'$set' : {'employees': employees}})
       startupBase.update_one({'name':name}, {'$set' : {'last updated': last_update}})

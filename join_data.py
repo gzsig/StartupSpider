@@ -6,6 +6,9 @@ import time
 from collections import OrderedDict
 from operator import itemgetter   
 
+# starting to count time to get full duration of run time
+start = time.time()
+
 # Getting acces to database
 password = ""
 with open("password.txt", "r") as password_file:
@@ -78,3 +81,8 @@ for startup in angelList.find():
     print(cont)
     print('{} already exists!'.format(name))
     print('\n')
+
+# gets the end time and print the duration
+end = time.time()
+dutration = ((end - start) / 60)
+print('duration was {} min'.format(dutration))
