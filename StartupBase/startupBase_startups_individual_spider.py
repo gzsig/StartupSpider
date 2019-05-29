@@ -77,9 +77,9 @@ for startup in startupBase.find():
         startupBase.update_one({'name':name},{'$set' : {'about' : about}})
 
 
+      members = []
       if len(driver.find_elements_by_css_selector('.member__body')) > 0:
         people = driver.find_elements_by_css_selector('.member__body')
-        members = []
         for person in people:
           if len(person.find_elements_by_css_selector('.member__link')) > 0:
             member = {
@@ -99,8 +99,8 @@ for startup in startupBase.find():
       foundation = info_card.find_elements_by_css_selector('.mold-text.sb-size-10')[0].text
       employees = info_card.find_elements_by_css_selector('.mold-text.sb-size-10')[1].text
       last_update = info_card.find_elements_by_css_selector('.mold-text.sb-size-10')[2].text
-
-      startupBase.update_one({'name':name}, {'$set' : {'members': members}})
+      if members != []:
+        startupBase.update_one({'name':name}, {'$set' : {'members': members}})
       startupBase.update_one({'name':name}, {'$set' : {'foundation': foundation}})
       startupBase.update_one({'name':name}, {'$set' : {'employees': employees}})
       startupBase.update_one({'name':name}, {'$set' : {'last updated': last_update}})
