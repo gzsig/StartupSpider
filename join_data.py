@@ -22,6 +22,8 @@ dealBook = db.dealBook
 startSe = db.startSe
 startupBase = db.startupBase
 cont = 0
+
+
 for startup in startupBase.find():
   name = startup['name']
   for startse in startSe.find({'name' : name}):
@@ -29,8 +31,50 @@ for startup in startupBase.find():
   for angellist in angelList.find({'name' : name}):
     startup.update(angellist)
 
-  cont += 1
-  print(cont)
-  print(startup)
-  print('\n')
+  if allStartups.find_one({'name' : str(name)}) == None and str(name) != '':
+    allStartups.insert_one(startup)
+    cont += 1
+    print(cont)
+    print('{} saved!'.format(name))
+    print('\n')
+  else:
+    cont += 1
+    print(cont)
+    print('{} already exists!'.format(name))
+    print('\n')
 
+for startup in startSe.find():
+  name = startup['name']
+  for startupbase in startupBase.find({'name' : name}):
+    startup.update(startupbase)
+  for angellist in angelList.find({'name' : name}):
+    startup.update(angellist)
+  if allStartups.find_one({'name' : str(name)}) == None and str(name) != '':
+    allStartups.insert_one(startup)
+    cont += 1
+    print(cont)
+    print('{} saved!'.format(name))
+    print('\n')
+  else:
+    cont += 1
+    print(cont)
+    print('{} already exists!'.format(name))
+    print('\n')
+
+for startup in angelList.find():
+  name = startup['name']
+  for startupbase in startupBase.find({'name' : name}):
+    startup.update(startupbase)
+  for startse in startSe.find({'name' : name}):
+    startup.update(startse)
+  if allStartups.find_one({'name' : str(name)}) == None and str(name) != '':
+    allStartups.insert_one(startup)
+    cont += 1
+    print(cont)
+    print('{} saved!'.format(name))
+    print('\n')
+  else:
+    cont += 1
+    print(cont)
+    print('{} already exists!'.format(name))
+    print('\n')
