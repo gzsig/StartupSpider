@@ -23,15 +23,23 @@ startupBase = db.startupBase
 # starting to count time to get full duration of run time
 start = time.time()
 
+# cont = 0
+# for startup in startupBase.find({'info' : ''}):
+#   name = startup['name']
+#   cont += 1
+#   startupBase.update_one({'name' : name}, {'$unset' : {'info': 1}})
+#   print(cont)
+#   print(startup)
+#   print('\n')
+
 cont = 0
-for startup in startupBase.find({'info' : ''}):
+for startup in startupBase.find({'location' : '-'}):
   name = startup['name']
   cont += 1
-  startupBase.update_one({'name' : name}, {'$unset' : {'info': 1}})
+  startupBase.update_one({'name' : name}, {'$unset' : {'location': 1}})
   print(cont)
   print(startup)
   print('\n')
-
 
 
 # gets the end time and print the duration
