@@ -26,13 +26,11 @@ start = time.time()
 cont = 0
 for startup in startupBase.find({'info' : ''}):
   name = startup['name']
-  while cont < 1:
-    cont += 1
-    print(startup)
-    # startup.update({}, {'$unset' : {'info': 1 }})
-    startupBase.update_one({'name' : name}, {'$unset' : {'info': 1}})
-    print(cont)
-    print(startup)
+  cont += 1
+  startupBase.update_one({'name' : name}, {'$unset' : {'info': 1}})
+  print(cont)
+  print(startup)
+  print('\n')
 
 
 
